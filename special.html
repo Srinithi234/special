@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hi V! 💖</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    height:100vh;overflow:hidden;
+    display:flex;justify-content:center;align-items:center;
+    background:radial-gradient(circle at center,#ff9a9e,#fad0c4,#fbc2eb);
+    font-family:"Poppins",sans-serif;
+  }
+
+  /* Kitty drawing */
+  .kitty{
+    position:relative;
+    width:160px;height:160px;
+    cursor:pointer;
+    transition:transform .3s ease;
+  }
+  .kitty:hover{transform:scale(1.05)}
+  .ear{
+    position:absolute;
+    width:50px;height:60px;
+    background:#ff8ec4;
+    top:-10px;border-radius:50% 50% 0 0;
+  }
+  .ear.left{left:10px;transform:rotate(-15deg);}
+  .ear.right{right:10px;transform:rotate(15deg);}
+  .head{
+    position:absolute;
+    width:160px;height:130px;
+    background:#ffc8dd;
+    border-radius:80px;
+    top:20px;
+    border:4px solid #ff5fa2;
+  }
+  .eye{
+    position:absolute;width:20px;height:20px;
+    background:#000;border-radius:50%;
+    top:55px;
+  }
+  .eye.left{left:45px;}
+  .eye.right{right:45px;}
+  .nose{
+    position:absolute;
+    width:16px;height:12px;
+    background:#ff4da6;border-radius:50%;
+    top:78px;left:50%;transform:translateX(-50%);
+  }
+  .mouth{
+    position:absolute;
+    width:50px;height:25px;border-bottom:3px solid #ff4da6;
+    border-radius:0 0 50px 50px;top:90px;left:50%;transform:translateX(-50%);
+  }
+  .heart{
+    position:absolute;
+    bottom:-30px;left:50%;transform:translateX(-50%) rotate(-10deg);
+    font-size:40px;color:#ff4da6;
+  }
+
+  /* Question popup */
+  .question-box{
+    position:absolute;
+    top:60%;left:50%;
+    transform:translate(-50%,-50%) scale(0);
+    background:white;
+    border-radius:25px;
+    padding:30px 40px;
+    text-align:center;
+    box-shadow:0 0 25px rgba(255,105,180,0.5);
+    transition:transform .5s ease;
+  }
+  .question-box.show{transform:translate(-50%,-50%) scale(1);}
+  .question-box h2{color:#ff1f8f;margin-bottom:25px;}
+  .buttons{display:flex;justify-content:center;gap:30px;}
+  button{
+    padding:12px 35px;
+    border:none;border-radius:30px;
+    font-size:1.2rem;cursor:pointer;
+    transition:all .3s ease;
+  }
+  #yes{background:#00e676;color:white;box-shadow:0 0 10px #00e676;}
+  #yes:hover{transform:scale(1.2);}
+  #no{background:#ff4b5c;color:white;position:relative;}
+
+  /* Confetti */
+  .confetti{
+    position:fixed;width:10px;height:10px;border-radius:50%;
+    animation:fall 2s linear forwards;
+    z-index:10;
+  }
+  @keyframes fall{
+    0%{opacity:1;transform:translate(0,0) rotate(0deg);}
+    100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(720deg);}
+  }
+
+  /* Valentine message */
+  #thankyou{
+    position:fixed;
+    inset:0;
+    background:radial-gradient(circle at center,#ff4081,#ff80ab,#ffd6e8);
+    display:flex;justify-content:center;align-items:center;
+    flex-direction:column;
+    font-size:3rem;font-weight:700;color:white;
+    text-align:center;
+    text-shadow:0 0 25px #ffbde3,0 0 50px #ff5fa2;
+    opacity:0;pointer-events:none;
+    transition:opacity 1s ease;
+    padding:30px;
+  }
+  #thankyou.show{opacity:1;pointer-events:auto;}
+
+  /* Floating emoji */
+  .emoji{
+    position:fixed;
+    font-size:2rem;
+    animation:floatUp 5s linear forwards;
+    z-index:100;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) scale(1);opacity:1;}
+    100%{transform:translateY(-120vh) scale(1.8);opacity:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="kitty" id="kitty">
+  <div class="ear left"></div>
+  <div class="ear right"></div>
+  <div class="head">
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+    <div class="nose"></div>
+    <div class="mouth"></div>
+  </div>
+  <div class="heart">💗</div>
+</div>
+
+<div class="question-box" id="questionBox">
+  <h2>Will you be my forever Valentine Vishnu? 💞</h2>
+  <div class="buttons">
+    <button id="yes">Yes 🎀</button>
+    <button id="no">No 💔</button>
+  </div>
+</div>
+
+<div id="thankyou">I'm forever yours V 💖</div>
+
+<script>
+  const kitty=document.getElementById('kitty');
+  const box=document.getElementById('questionBox');
+  const yes=document.getElementById('yes');
+  const no=document.getElementById('no');
+  const thankyou=document.getElementById('thankyou');
+
+  kitty.addEventListener('click',()=>{
+    box.classList.add('show');
+  });
+
+  // "No" button dodges within screen
+  no.addEventListener('mouseover',()=>{
+    const maxX=window.innerWidth-no.offsetWidth-40;
+    const maxY=window.innerHeight-no.offsetHeight-40;
+    const x=Math.random()*maxX;
+    const y=Math.random()*maxY;
+    no.style.position='absolute';
+    no.style.left=`${x}px`;
+    no.style.top=`${y}px`;
+  });
+
+  no.addEventListener('click',()=>{
+    alert("😹 You are not allowed to choose 'No'! Try again!");
+  });
+
+  // Confetti + emojis on Yes
+  yes.addEventListener('click',()=>{
+    // Confetti explosion
+    for(let i=0;i<200;i++){
+      const c=document.createElement('div');
+      c.className='confetti';
+      c.style.background=`hsl(${Math.random()*360},100%,60%)`;
+      c.style.left=window.innerWidth/2+'px';
+      c.style.top=window.innerHeight/2+'px';
+      c.style.setProperty('--x',`${(Math.random()-0.5)*window.innerWidth}px`);
+      c.style.setProperty('--y',`${(Math.random()-0.5)*window.innerHeight}px`);
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),2000);
+    }
+
+    // Show message
+    thankyou.classList.add('show');
+
+    // Floating emojis
+    const emojis=['💋','💖','💘','💞','💗','❤️','😘'];
+    const emojiInterval=setInterval(()=>{
+      const e=document.createElement('div');
+      e.className='emoji';
+      e.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      e.style.left=Math.random()*100+'vw';
+      e.style.top='100vh';
+      e.style.animationDuration=(4+Math.random()*3)+'s';
+      document.body.appendChild(e);
+      setTimeout(()=>e.remove(),7000);
+    },200);
+
+    // Stop creating after few seconds
+    setTimeout(()=>clearInterval(emojiInterval),6000);
+  });
+</script>
+
+</body>
+</html>
